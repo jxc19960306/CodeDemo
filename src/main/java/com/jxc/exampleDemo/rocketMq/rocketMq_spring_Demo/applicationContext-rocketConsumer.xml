@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean id="itemMessageListner" class="com.jxc.pinyougou.web.item.listener.ItemPageListener"></bean>
+    <bean class="org.apache.rocketmq.client.consumer.DefaultMQPushConsumer" init-method="start"
+          destroy-method="shutdown">
+        <!--名称服务器-->
+        <property name="namesrvAddr" value="${rocket.namesrvAddr}"/>
+        <!--消息 订阅方式-->
+        <property name="messageModel" value="CLUSTERING"/>
+        <!--组名-->
+        <property name="consumerGroup" value="PAGE_CONSUMER"/>
+        <!--指定监听器-->
+        <property name="messageListener" ref="itemMessageListner"/>
+        <!--订阅的主题-->
+        <property name="subscription">
+            <map>
+                <entry key="PAGE_TOPIC" value="*"/>
+            </map>
+        </property>
+    </bean>
+</beans>
