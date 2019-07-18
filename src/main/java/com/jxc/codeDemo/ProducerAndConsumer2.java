@@ -19,37 +19,40 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ProducerAndConsumer2 {
     public static void main(String[] args) {
         ShareResource shareResource = new ShareResource();
-        for (int i = 0; i < 10; i++) {
-            new Thread(() -> {
+        new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
                 try {
                     shareResource.pint5();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }, "A").start();
-            new Thread(() -> {
-
+            }
+        }, "A").start();
+        new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
                 try {
                     shareResource.pint10();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }, "B").start();
-            new Thread(() -> {
+            }
+        }, "B").start();
+        new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
                 try {
                     shareResource.pint15();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }, "C").start();
-        }
-
+            }
+        }, "C").start();
     }
+
 }
 
 class ShareResource {
     // 1 A 2 B 3 C
-    volatile int flag = 1;
+     int flag = 1;
     private Lock lock = new ReentrantLock();
     private Condition condition1 = lock.newCondition();
     private Condition condition2 = lock.newCondition();
@@ -65,6 +68,7 @@ class ShareResource {
                 System.out.printf("%s----%s%n", Thread.currentThread().getName(), i);
             }
             flag = 2;
+            System.out.println("flag = " + flag);
             condition2.signal();
         } finally {
             lock.unlock();
@@ -81,6 +85,7 @@ class ShareResource {
                 System.out.printf("%s----%s%n", Thread.currentThread().getName(), i);
             }
             flag = 3;
+            System.out.println("flag = " + flag);
             condition3.signal();
         } finally {
             lock.unlock();
@@ -91,12 +96,13 @@ class ShareResource {
         try {
             lock.lock();
             while (flag != 3) {
-                condition2.await();
+                condition3.await();
             }
             for (int i = 0; i < 15; i++) {
                 System.out.printf("%s----%s%n", Thread.currentThread().getName(), i);
             }
             flag = 1;
+            System.out.println("flag = " + flag);
             condition1.signal();
         } finally {
             lock.unlock();
