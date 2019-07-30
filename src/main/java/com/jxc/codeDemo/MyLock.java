@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @date 2019/7/15
  */
 public class MyLock {
-    AtomicReference<Thread> atomicReference = new AtomicReference<>();
+    AtomicReference<Thread> atomicReference = new AtomicReference();
 
     public void lock() {
         Thread thread = Thread.currentThread();

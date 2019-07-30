@@ -1,4 +1,4 @@
-package com.jxc.exampleDemo.httpClient.httpClient_simple_Demo;
+package com.jxc.exampleDemo.HTTPUtil.httpClient_simple_Demo;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
