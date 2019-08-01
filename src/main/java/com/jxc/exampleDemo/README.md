@@ -20,6 +20,8 @@ Redis
 
 rocketMQ
 
+activeMQ
+
 ## SSO单点登录解决方案
 
 SSO
@@ -31,3 +33,4 @@ clusterId
 ## 微信支付解决方案
 
 wechatPay
+
