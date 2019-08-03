@@ -34,3 +34,5 @@ clusterId
 
 wechatPay
 
+## ORM关系映射框架 
+springData_JPA

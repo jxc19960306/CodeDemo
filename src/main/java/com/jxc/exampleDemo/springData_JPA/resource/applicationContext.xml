@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jsp="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <property name="url" value="jdbc:mysql:///jpa"></property>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+    </bean>
+    <!--  配置 JPA 的EntityManagerFactory  -->
+    <bean id="entityManageFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <!-- 绑定数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- JPA 供应商处理器-->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <!-- 扫描包-->
+        <property name="packagesToScan" value="com.jxc"/>
+        <!-- 配置 jpa属性-->
+        <property name="jpaProperties">
+            <props>
+                <!-- 显示执行的sql-->
+                <!-- 二级缓存相关 -->
+                <!--
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+                <prop key="net.sf.ehcache.configurationResourceName">ehcache-hibernate.xml</prop>
+                -->
+                <!-- 生成的数据表的列的映射策略 -->
+                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+                <!-- hibernate 基本属性 -->
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+    <!--    配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManageFactory"/>
+    </bean>
+    <!--    配置支持事务的注解-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--   扫描 Repository ben 所在的包-->
+    <jsp:repositories base-package="com.jxc" entity-manager-factory-ref="entityManageFactory"></jsp:repositories>
+</beans>
